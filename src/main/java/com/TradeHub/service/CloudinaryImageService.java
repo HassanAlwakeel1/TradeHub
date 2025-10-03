@@ -8,4 +8,7 @@ public interface CloudinaryImageService {
     Map<String, Object> upload(byte[] fileBytes);
 
     Map<String, Object> upload(MultipartFile file);
+
+    void delete(String publicId);
+
 }

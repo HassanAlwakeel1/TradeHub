@@ -46,5 +46,16 @@ public class CloudinaryImageServiceImpl implements CloudinaryImageService {
             throw new RuntimeException("Image upload failed", e);
         }
     }
+    @Override
+    public void delete(String publicId) {
+        logger.info("Deleting image from Cloudinary. Public ID: " + publicId);
+        try {
+            cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+            logger.info("Image deleted successfully: " + publicId);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Image deletion failed for Public ID: " + publicId, e);
+            throw new RuntimeException("Image deletion failed", e);
+        }
+    }
 }
 
