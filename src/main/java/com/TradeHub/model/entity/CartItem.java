@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity()
+@Table(name = "cart_item")
 @Setter
 @Getter
 @AllArgsConstructor
