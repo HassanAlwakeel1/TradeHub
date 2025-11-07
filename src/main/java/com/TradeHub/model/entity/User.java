@@ -79,6 +79,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VerificationToken> verificationTokens;
 
+    @OneToMany(mappedBy = "reviewer", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonManagedReference(value = "user-reviews")
+    private List<Review> givenReviews;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));

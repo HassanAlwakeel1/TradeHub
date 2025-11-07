@@ -2,6 +2,8 @@ package com.TradeHub.model.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ProductResponseDTO {
     private Long id;
@@ -12,5 +14,7 @@ public class ProductResponseDTO {
     private Long stockQuantity;
     private String imageUrl;
     private Long sellerId;
+
+    private List<ReviewDTO> reviews;
 
 }

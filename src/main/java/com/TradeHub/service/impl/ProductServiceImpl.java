@@ -76,14 +76,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDTO getProductById(Long id) {
-        return productRepository.findById(id)
-                .map(productMapper::toResponseDto)
+        Product product = productRepository.findByIdWithReviews(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+        return productMapper.toResponseDto(product);
     }
 
     @Override
     public List<ProductResponseDTO> getAllProducts() {
-        return productRepository.findAll()
+        return productRepository.findAllWithReviews()
                 .stream()
                 .map(productMapper::toResponseDto)
                 .collect(Collectors.toList());
