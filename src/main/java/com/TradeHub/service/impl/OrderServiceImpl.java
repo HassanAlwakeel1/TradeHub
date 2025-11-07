@@ -3,8 +3,10 @@ package com.TradeHub.service.impl;
 import com.TradeHub.model.dto.CartItemDTO;
 import com.TradeHub.model.dto.CartResponseDTO;
 import com.TradeHub.model.dto.DirectCheckoutRequest;
+import com.TradeHub.model.dto.OrderDTO;
 import com.TradeHub.model.entity.*;
 import com.TradeHub.model.entity.enums.OrderStatus;
+import com.TradeHub.model.mapper.OrderMapper;
 import com.TradeHub.repository.*;
 import com.TradeHub.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository;
+    private final OrderMapper orderMapper;
 
     @Override
     public Order createOrderFromCart(Long userId) {
@@ -111,4 +114,32 @@ public class OrderServiceImpl implements OrderService {
         // 5️⃣ Save and return
         return orderRepository.save(order);
     }
+
+    @Override
+    public OrderDTO updateOrderStatus(Long orderId, OrderStatus newStatus) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+
+        // Optional: prevent invalid updates
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            throw new RuntimeException("Cannot update status of a cancelled order");
+        }
+
+        order.setStatus(newStatus);
+
+        Order updatedOrder = orderRepository.save(order);
+
+        // ✅ Convert entity → DTO before returning
+        return orderMapper.toDTO(updatedOrder);
+    }
+
+    @Override
+    public OrderDTO getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+
+        // ✅ Convert entity → DTO before returning
+        return orderMapper.toDTO(order);
+    }
+
 }
